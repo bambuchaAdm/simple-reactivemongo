@@ -16,12 +16,17 @@
 
 package uk.gov.hmrc.mongo
 
+import java.time.{Clock, ZoneId, ZonedDateTime}
+
 import org.joda.time.{DateTime, DateTimeZone}
 
-@deprecated("Inject TimeProvider instead")
-trait CurrentTime {
+class TimeProvider {
+  protected val jodaZone: DateTimeZone = DateTimeZone.UTC
 
-  protected lazy val zone: DateTimeZone = DateTimeZone.UTC
+  protected val javaUtcClock = Clock.systemUTC()
 
-  def withCurrentTime[A](f: DateTime => A) = f(DateTime.now.withZone(zone))
+  @deprecated("Please use `currentTime` method")
+  def withCurrentTime[A](f: DateTime => A) = f(DateTime.now.withZone(jodaZone))
+
+  def currentTime[A](f: ZonedDateTime  => A) = f(ZonedDateTime.now(javaUtcClock))
 }

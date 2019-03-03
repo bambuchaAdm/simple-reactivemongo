@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.mongo
 
+import javax.inject.Provider
 import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.api.commands.LastError
-import reactivemongo.api.{DefaultDB, FailoverStrategy}
+import reactivemongo.api.{DB, DefaultDB, FailoverStrategy}
 import reactivemongo.bson.BSONDocument
 
 import scala.concurrent.duration._
@@ -32,6 +33,10 @@ trait MongoSpecSupport {
   implicit val mongoConnectorForTest: MongoConnector = MongoConnector(mongoUri)
 
   implicit val mongo: () => DefaultDB = mongoConnectorForTest.db
+
+  val provider: Provider[DB] = new Provider[DB] {
+    override def get(): DB = mongoConnectorForTest.db()
+  }
 
   def bsonCollection(name: String)(
     failoverStrategy: FailoverStrategy = mongoConnectorForTest.helper.db.failoverStrategy): BSONCollection =

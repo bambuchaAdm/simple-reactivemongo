@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.mongo
 
+import javax.inject.Provider
 import play.api.libs.json.{JsError, JsResultException, JsSuccess, Reads}
 import reactivemongo.api.DB
 import reactivemongo.api.collections.bson.BSONCollection
@@ -37,11 +38,13 @@ trait CollectionName {
 }
 
 @deprecated("Please use findAndUpdate method from ReactiveRepository instead", "7.0.0")
-trait AtomicUpdate[T] extends CurrentTime with BSONBuilderHelpers with MongoDb with CollectionName {
+trait AtomicUpdate[T] extends CurrentTime with BSONBuilderHelpers with CollectionName {
+
+  protected def mongo: Provider[DB]
 
   def isInsertion(newRecordId: BSONObjectID, oldRecord: T): Boolean
 
-  private lazy val bsonCollection: BSONCollection = mongo().collection[BSONCollection](collectionName)
+  private lazy val bsonCollection: BSONCollection = mongo.get().collection[BSONCollection](collectionName)
 
   /**
     *

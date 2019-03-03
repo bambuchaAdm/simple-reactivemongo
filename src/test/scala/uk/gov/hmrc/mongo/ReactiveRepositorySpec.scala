@@ -375,7 +375,7 @@ object TestObject {
 class SimpleTestRepository(implicit mc: MongoConnector, ec: ExecutionContext)
     extends ReactiveRepository[TestObject, BSONObjectID](
       collectionName = "simpleTestRepository",
-      mongo          = mc.db,
+      mongo          = mc.provider,
       domainFormat   = TestObject.formats,
       idFormat       = ReactiveMongoFormats.objectIdFormats) {
 
@@ -388,7 +388,7 @@ class SimpleTestRepository(implicit mc: MongoConnector, ec: ExecutionContext)
 class FailingIndexesTestRepository(implicit mc: MongoConnector, ec: ExecutionContext)
     extends ReactiveRepository[TestObject, BSONObjectID](
       "failingIndexesTestRepository",
-      mc.db,
+      mc.provider,
       TestObject.formats,
       ReactiveMongoFormats.objectIdFormats) {
 

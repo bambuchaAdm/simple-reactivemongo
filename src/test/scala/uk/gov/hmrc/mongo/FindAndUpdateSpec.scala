@@ -17,10 +17,11 @@
 package uk.gov.hmrc.mongo
 
 import com.outworkers.util.samplers._
+import javax.inject.Provider
 import org.scalatest._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import play.api.libs.json.{Json, OFormat}
-import reactivemongo.api.DefaultDB
+import reactivemongo.api.{DB, DefaultDB}
 
 class FindAndUpdateSpec
     extends WordSpec
@@ -33,7 +34,7 @@ class FindAndUpdateSpec
     with Awaiting
     with LoneElement {
 
-  val repo = new ExampleRepo(mongo)
+  val repo = new ExampleRepo(provider)
 
   override def beforeEach() {
     await(repo.removeAll())
@@ -144,4 +145,4 @@ object Example {
   implicit val format: OFormat[Example] = Json.format[Example]
 }
 
-class ExampleRepo(mongo: () => DefaultDB) extends ReactiveRepository("find-and-modify", mongo, Example.format)
+class ExampleRepo(mongo: Provider[DB]) extends ReactiveRepository("find-and-modify", mongo, Example.format)

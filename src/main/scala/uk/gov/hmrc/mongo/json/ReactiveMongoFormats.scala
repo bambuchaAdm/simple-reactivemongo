@@ -72,10 +72,10 @@ trait ReactiveMongoFormats {
     )
   }
 
-  implicit val objectIdFormats      = Format(objectIdRead, objectIdWrite)
-  implicit val dateTimeFormats      = Format(dateTimeRead, dateTimeWrite)
-  implicit val localDateFormats     = Format(localDateRead, localDateWrite)
-  implicit val localDateTimeFormats = Format(localDateTimeRead, localDateTimeWrite)
+  implicit val objectIdFormats: Format[BSONObjectID] = Format(objectIdRead, objectIdWrite)
+  implicit val dateTimeFormats: Format[DateTime] = Format(dateTimeRead, dateTimeWrite)
+  implicit val localDateFormats: Format[LocalDate] = Format(localDateRead, localDateWrite)
+  implicit val localDateTimeFormats: Format[LocalDateTime] = Format(localDateTimeRead, localDateTimeWrite)
 
   def mongoEntity[A](baseFormat: Format[A]): Format[A] = {
     import JsonExtensions._

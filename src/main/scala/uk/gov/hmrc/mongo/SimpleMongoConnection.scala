@@ -16,10 +16,12 @@
 
 package uk.gov.hmrc.mongo
 
-import reactivemongo.api.FailoverStrategy
+import javax.inject.Provider
+import reactivemongo.api.{DB, FailoverStrategy}
 
 import scala.language.postfixOps
 
+@deprecated("Pease use injected version")
 trait SimpleMongoConnection {
 
   import reactivemongo.api.{DefaultDB, MongoConnection}
@@ -32,6 +34,10 @@ trait SimpleMongoConnection {
   val failoverStrategy: Option[FailoverStrategy]
 
   implicit def db: () => DefaultDB = () => mongoDb
+
+  def provider = new Provider[DB]{
+    override def get(): DB = mongoDb
+  }
 
   private lazy val mongoDb = connect
 
@@ -52,5 +58,5 @@ trait SimpleMongoConnection {
 
 }
 
-case class MongoConnector(mongoConnectionUri: String, failoverStrategy: Option[FailoverStrategy] = None)
-    extends SimpleMongoConnection
+case class MongoConnector(mongoConnectionUri: String,
+                          failoverStrategy: Option[FailoverStrategy] = None) extends SimpleMongoConnection

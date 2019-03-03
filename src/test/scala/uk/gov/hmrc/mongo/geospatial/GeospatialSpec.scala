@@ -37,7 +37,7 @@ object Place {
 class GeospatialTestRepository(implicit mc: MongoConnector, ec: ExecutionContext)
     extends ReactiveRepository[Place, BSONObjectID](
       "geospatialTestRepository",
-      mc.db,
+      mc.provider,
       Place.formats,
       ReactiveMongoFormats.objectIdFormats)
     with Geospatial[Place, BSONObjectID] {

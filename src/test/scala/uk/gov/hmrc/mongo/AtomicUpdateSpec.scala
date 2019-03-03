@@ -253,7 +253,7 @@ class AtomicUpdateSpec extends WordSpec with Matchers with MongoSpecSupport with
   class AtomicTestRepository(implicit mc: MongoConnector)
       extends ReactiveRepository[AtomicTestObject, BSONObjectID](
         "atomicTestRepository",
-        mc.db,
+        mc.provider,
         AtomicTestObject.formats,
         ReactiveMongoFormats.objectIdFormats)
       with AtomicUpdate[AtomicTestObject] {
@@ -269,7 +269,7 @@ class AtomicUpdateSpec extends WordSpec with Matchers with MongoSpecSupport with
   class AtomicTestRepositoryWithIdOverride(implicit mc: MongoConnector)
       extends ReactiveRepository[AtomicTestObjectWithIdOverride, BSONObjectID](
         "atomicIdOverrideTestRepository",
-        mc.db,
+        mc.provider,
         AtomicTestObjectWithIdOverride.formats,
         ReactiveMongoFormats.objectIdFormats)
       with AtomicUpdate[AtomicTestObjectWithIdOverride] {
